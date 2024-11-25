@@ -1,42 +1,55 @@
 import React, { Component } from 'react';
-import { DropdownButton, MenuItem } from 'react-bootstrap';
 import List from './List';
 
 class FilteredList extends Component {
   constructor(props) {
     super(props);
-
-    //The state is just a list of key/value pairs (like a hashmap)
-    //TODO (FilteredList): Add an additional state variable within this.state called "type" and set it to a default value
     this.state = {
-      search: ""
+      search: "", // Tracks the search input
+      filter: "All", // Tracks the dropdown selection
     };
   }
 
-  //Sets the state whenever the user types on the search bar
+  // Update the search term in state
   onSearch = (event) => {
-    this.setState({search: event.target.value.trim().toLowerCase()});
-  }
+    this.setState({ search: event.target.value.toLowerCase() });
+  };
 
-  //TODO (FilteredList): Set the state of the "type" state variable depending on what is passed in
-  onFilter = (event) => {
+  // Update the filter type in state
+  onFilterChange = (event) => {
+    this.setState({ filter: event.target.value });
+  };
 
-  }
+  // Filter items based on both the search and dropdown filter
+  filterItems = (item) => {
+    const matchesSearch = item.name.toLowerCase().includes(this.state.search);
+    const matchesFilter =
+      this.state.filter === "All" || item.type === this.state.filter;
+    return matchesSearch && matchesFilter;
+  };
 
-  //TODO (FilteredList): Change filterItem to take into account the "type" state variable when filtering
-  filterItem = (item) => {
-      return item.name.toLowerCase().search(this.state.search) !== -1;
-  }
-
-  render(){
+  render() {
     return (
-        <div className = "filter-list">
-         
-          /*TODO (FilteredList): Create a Dropdown Menu with three different menu options: Fruit, Vegetables, and All*/
-          
-          <input type = "text" placeholder = "Search" onChange = {this.onSearch} />
-          <List items = {this.props.items.filter(this.filterItem)} />
-        </div>
+      <div className="filter-list">
+        <h1>Produce Search</h1>
+
+        {/* Search Input */}
+        <input
+          type="text"
+          placeholder="Search"
+          onChange={this.onSearch}
+        />
+
+        {/* Dropdown Filter */}
+        <select onChange={this.onFilterChange}>
+          <option value="All">All</option>
+          <option value="Fruit">Fruits</option>
+          <option value="Vegetable">Vegetables</option>
+        </select>
+
+        {/* Render the List component with filtered items */}
+        <List items={this.props.items.filter(this.filterItems)} />
+      </div>
     );
   }
 }

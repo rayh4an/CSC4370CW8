@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class List extends Component {
+
   renderList() {
-    const items = this.props.items.map(item => {
-      return <li key={item.name}>{item.name}</li>
+    const items = this.props.items.map((item) => {
+      return <li key={item.name}>{item.name}</li>;
     });
 
     return items;
@@ -18,4 +19,4 @@ class List extends Component {
   }
 }
 
-export default List; 
+export default List;
